@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mini Royale - Duel tactique en temps réel</title>
+    <meta
+      name="description"
+      content="Mini Royale est un mini-jeu tactique inspiré de Clash Royale : déployez vos unités, défendez vos tours et remportez la couronne."
+    />
+    <meta property="og:title" content="Mini Royale - Duel tactique" />
+    <meta
+      property="og:description"
+      content="Déployez vos troupes en temps réel et défendez votre royaume dans ce mini-jeu gratuit inspiré de Clash Royale."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://example.com/mini-royale" />
+    <meta
+      property="og:image"
+      content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAM0lEQVR4Xu3PsQkAIAwEsb7/p66MEBjBK6w2SpJkiRJkiRJkiRJkiRJkiRJkiRJ0k/IAlAhhj0Q12hSAAAAAElFTkSuQmCC"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%23000'/><text x='50%' y='58%' fill='%23fff' font-size='36' font-family='Inter,Arial,sans-serif' text-anchor='middle'>M</text></svg>" />
+  </head>
+  <body>
+    <header class="topbar" role="banner">
+      <div class="branding">
+        <span class="logo" aria-hidden="true">🏰</span>
+        <p>
+          <strong>Mini Royale</strong>
+          <span>Mini-jeu tactique en ligne</span>
+        </p>
+      </div>
+      <nav aria-label="Navigation principale">
+        <a href="#jouer" class="cta">Jouer maintenant</a>
+        <a href="#regles">Règles</a>
+        <a href="#credits">Crédits</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="jouer">
+        <div class="hero-text">
+          <h1>Dominez l'arène en 3 minutes</h1>
+          <p>
+            Gérez votre élixir, déployez vos unités et abattez la tour adverse dans
+            ce duel dynamique inspiré des plus grands jeux de stratégie en temps réel.
+          </p>
+          <button class="cta" id="startGame" type="button">Lancer une partie</button>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="tower player"></div>
+          <div class="arena-line"></div>
+          <div class="tower ai"></div>
+        </div>
+      </section>
+
+      <section class="dashboard" aria-live="polite">
+        <div class="score-card" aria-label="Points joueur">
+          <h2>Votre camp</h2>
+          <p class="value" id="playerScore">Tour : 100</p>
+          <p class="value" id="playerElixir">Élixir : 5</p>
+        </div>
+        <div class="score-card" aria-label="Points adversaire">
+          <h2>Adversaire</h2>
+          <p class="value" id="aiScore">Tour : 100</p>
+          <p class="value" id="timer">Temps : 180s</p>
+        </div>
+        <div class="deck" role="list" aria-label="Cartes disponibles">
+          <button class="card" data-type="knight" type="button">
+            <span class="card-title">Chevalier</span>
+            <span class="cost">Coût : 3</span>
+          </button>
+          <button class="card" data-type="archer" type="button">
+            <span class="card-title">Archer</span>
+            <span class="cost">Coût : 2</span>
+          </button>
+          <button class="card" data-type="golem" type="button">
+            <span class="card-title">Golem</span>
+            <span class="cost">Coût : 5</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="arena" aria-label="Champ de bataille">
+        <div class="lane" id="lane"></div>
+      </section>
+
+      <section id="regles" class="info">
+        <h2>Comment jouer ?</h2>
+        <ol>
+          <li>Cliquez sur une carte pour déployer l'unité correspondante.</li>
+          <li>Chaque carte consomme de l'élixir : gérez vos ressources.</li>
+          <li>Les unités avancent vers la tour ennemie et infligent des dégâts.</li>
+          <li>Défendez votre propre tour en maintenant l'adversaire à distance.</li>
+          <li>La partie dure 3 minutes : la tour avec le plus de points gagne.</li>
+        </ol>
+      </section>
+
+      <section id="credits" class="info">
+        <h2>Crédits & mentions</h2>
+        <p>
+          Mini Royale est un projet de démonstration inspiré par Clash Royale. Toutes les
+          marques citées appartiennent à leurs propriétaires respectifs.
+        </p>
+        <p>
+          <strong>Mentions légales :</strong> projet étudiant, aucun suivi publicitaire,
+          cookies uniquement fonctionnels.
+        </p>
+      </section>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <p>&copy; 2024 Mini Royale. Tous droits réservés.</p>
+      <a href="#regles">Mentions légales</a>
+    </footer>
+
+    <div class="modal" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle" hidden>
+      <div class="modal-content" tabindex="-1">
+        <h2 id="resultTitle">Fin de partie</h2>
+        <p id="resultMessage"></p>
+        <div class="modal-actions">
+          <button type="button" class="cta" id="playAgain">Rejouer</button>
+          <button type="button" class="ghost" id="closeModal">Fermer</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
