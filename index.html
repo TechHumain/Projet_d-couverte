@@ -58,48 +58,71 @@
         </div>
       </section>
 
-      <section class="dashboard" aria-live="polite">
-        <div class="score-card" aria-label="Points joueur">
-          <h2>Votre camp</h2>
-          <p class="value" id="playerScore">Tour : 100</p>
-          <p class="value" id="playerElixir">Élixir : 5</p>
+      <section class="game-shell" aria-label="Interface principale de Mini Royale">
+        <div class="hud" aria-live="polite">
+          <article class="hud-card" aria-label="Statut du joueur">
+            <header>
+              <h2>Votre camp</h2>
+            </header>
+            <p class="value" id="playerScore">Tour : 100</p>
+            <p class="value" id="playerElixir">Élixir : 5</p>
+          </article>
+          <article class="hud-card" aria-label="Progression de saison">
+            <header>
+              <h2>Progression</h2>
+            </header>
+            <div class="progress-stats">
+              <span><strong id="goldAmount">150</strong> or</span>
+              <span><strong id="trophyAmount">0</strong> trophées</span>
+            </div>
+          </article>
+          <article class="hud-card" aria-label="Statut de l'adversaire">
+            <header>
+              <h2>Adversaire</h2>
+            </header>
+            <p class="value" id="aiScore">Tour : 100</p>
+            <p class="value" id="timer">Temps : 180s</p>
+          </article>
         </div>
-        <div class="score-card" aria-label="Points adversaire">
-          <h2>Adversaire</h2>
-          <p class="value" id="aiScore">Tour : 100</p>
-          <p class="value" id="timer">Temps : 180s</p>
-        </div>
-        <div class="score-card" aria-label="Progression et monnaie">
-          <h2>Progression</h2>
-          <p class="value"><span id="goldAmount">150</span> or</p>
-          <p class="value"><span id="trophyAmount">0</span> trophées</p>
-        </div>
-        <div class="deck" role="list" aria-label="Deck actif" id="deckList" aria-live="polite"></div>
-      </section>
 
-      <section class="arena" aria-label="Champ de bataille">
-        <div class="lane" id="lane"></div>
-      </section>
+        <div class="game-layout">
+          <section class="battle-panel" aria-label="Zone de combat">
+            <header class="panel-header">
+              <h2>Champ de bataille</h2>
+              <p>Déployez vos unités pour protéger votre tour et briser celle de l'adversaire.</p>
+            </header>
+            <div class="arena" role="region" aria-label="Champ de bataille">
+              <div class="lane" id="lane"></div>
+            </div>
+            <footer class="panel-footer">
+              <h3>Deck rapide</h3>
+              <p class="hint" id="deckHint">
+                Sélectionnez jusqu'à 4 cartes actives. Un minimum de 3 cartes est requis pour jouer.
+              </p>
+              <div class="hand" role="list" aria-label="Deck actif" id="deckList" aria-live="polite"></div>
+            </footer>
+          </section>
 
-      <section id="collection" class="info collection-section">
-        <h2>Collection de cartes</h2>
-        <p>
-          Débloquez des cartes uniques, améliorez-les et composez un deck de 4 cartes pour affronter des vagues
-          d'ennemis de plus en plus coriaces.
-        </p>
-        <ul class="collection-list" id="collectionList" role="list"></ul>
-        <p class="hint" id="deckHint">Sélectionnez jusqu'à 4 cartes actives. Un minimum de 3 cartes est requis pour jouer.</p>
-      </section>
+          <aside class="command-panel" aria-label="Gestion de vos cartes et achats">
+            <section class="panel inventory" id="collection">
+              <header class="panel-header">
+                <h2>Collection de cartes</h2>
+                <p>Organisez vos unités et améliorez vos cartes préférées.</p>
+              </header>
+              <ul class="collection-list" id="collectionList" role="list"></ul>
+            </section>
 
-      <section id="shop" class="info shop-section">
-        <h2>Marché de la couronne</h2>
-        <p>
-          Investissez votre or dans des coffres mystères pour débloquer de nouvelles cartes ou améliorer votre deck actuel.
-          Chaque coffre garantit une progression.
-        </p>
-        <div class="shop-actions">
-          <button id="buyChest" type="button" class="cta">Acheter un coffre (120 or)</button>
-          <p id="shopFeedback" class="shop-feedback" role="status" aria-live="polite"></p>
+            <section class="panel shop" id="shop">
+              <header class="panel-header">
+                <h2>Marché de la couronne</h2>
+                <p>Achetez des coffres pour débloquer de nouvelles cartes et gagner en puissance.</p>
+              </header>
+              <div class="shop-actions">
+                <button id="buyChest" type="button" class="cta">Acheter un coffre (120 or)</button>
+                <p id="shopFeedback" class="shop-feedback" role="status" aria-live="polite"></p>
+              </div>
+            </section>
+          </aside>
         </div>
       </section>
 

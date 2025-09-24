@@ -163,42 +163,121 @@ nav {
   border-radius: 999px;
 }
 
-.dashboard {
+.game-shell {
+  padding: clamp(2rem, 6vw, 4rem) clamp(1.5rem, 5vw, 4rem);
+  display: grid;
+  gap: clamp(2rem, 4vw, 3rem);
+  background: rgba(15, 23, 42, 0.5);
+  border-block: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.hud {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
-  padding: 0 clamp(1.5rem, 5vw, 4rem);
 }
 
-.score-card {
+.hud-card {
   background: var(--bg-soft);
   border-radius: var(--radius);
   padding: 1.5rem;
   box-shadow: var(--shadow);
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  display: grid;
+  gap: 0.75rem;
 }
 
-.score-card h2 {
-  margin-top: 0;
+.hud-card header h2 {
+  margin: 0;
   font-size: 1.125rem;
 }
 
-.score-card .value {
+.hud-card .value {
   font-size: 1.5rem;
-  margin: 0.5rem 0;
+  margin: 0;
 }
 
-.deck {
+.progress-stats {
   display: flex;
-  justify-content: center;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--muted);
+}
+
+.progress-stats strong {
+  color: var(--text);
+}
+
+.game-layout {
+  display: grid;
+  grid-template-columns: 3fr minmax(280px, 1.35fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.battle-panel {
   background: var(--bg-soft);
-  border-radius: var(--radius);
-  padding: 1rem;
+  border-radius: calc(var(--radius) * 1.1);
+  padding: clamp(1.5rem, 3vw, 2rem);
   box-shadow: var(--shadow);
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  display: grid;
+  gap: 1.5rem;
+}
+
+.arena {
+  background: rgba(15, 23, 42, 0.55);
+  border-radius: calc(var(--radius) * 1.3);
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  box-shadow: inset 0 0 40px rgba(15, 23, 42, 0.6);
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.panel-header p {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+}
+
+.panel-footer {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.panel-footer h3 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.hand {
+  display: flex;
+  gap: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: calc(var(--radius) * 0.9);
+  padding: 1rem;
+  box-shadow: inset 0 0 25px rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.25);
   flex-wrap: wrap;
   min-height: 140px;
+}
+
+.command-panel {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.panel {
+  background: var(--bg-soft);
+  border-radius: calc(var(--radius) * 1.05);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  display: grid;
+  gap: 1.25rem;
 }
 
 .card {
@@ -241,10 +320,6 @@ nav {
 
 .card-icon {
   font-size: 1.5rem;
-}
-
-.arena {
-  padding: clamp(2rem, 6vw, 4rem);
 }
 
 .lane {
@@ -300,10 +375,6 @@ nav {
 
 .info ol {
   padding-left: 1.25rem;
-}
-
-.collection-section {
-  position: relative;
 }
 
 .collection-list {
@@ -510,12 +581,16 @@ nav {
     flex-wrap: wrap;
   }
 
-  .deck {
-    flex-direction: column;
+  .game-layout {
+    grid-template-columns: 1fr;
   }
 
-  .card {
-    width: 100%;
+  .hand {
+    justify-content: center;
+  }
+
+  .collection-list {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
