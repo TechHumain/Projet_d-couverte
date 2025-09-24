@@ -120,6 +120,7 @@ const aiHealthFill = document.getElementById("aiHealthFill");
 const playerElixirFill = document.getElementById("playerElixirFill");
 const aiElixirFill = document.getElementById("aiElixirFill");
 const timerRing = document.getElementById("timerRing");
+const timerHint = document.getElementById("timerHint");
 const goldFill = document.getElementById("goldFill");
 const trophyFill = document.getElementById("trophyFill");
 const buyChestBtn = document.getElementById("buyChest");
@@ -199,6 +200,12 @@ function updateMeter(fillElement, ratio) {
   fillElement.style.width = `${Math.round(clamped * 100)}%`;
 }
 
+function formatTime(seconds) {
+  const minutes = Math.max(0, Math.floor(seconds / 60));
+  const secs = Math.max(0, seconds % 60);
+  return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
 function updateHUD() {
   const playerTower = Math.max(0, Math.round(state.playerTower));
   const aiTower = Math.max(0, Math.round(state.aiTower));
@@ -208,7 +215,7 @@ function updateHUD() {
   if (aiElixirDisplay) {
     aiElixirDisplay.textContent = `Élixir : ${Math.floor(state.aiElixir)}`;
   }
-  timerEl.textContent = `Temps : ${state.timer}s`;
+  timerEl.textContent = `Temps : ${formatTime(state.timer)}`;
 
   updateMeter(playerHealthFill, playerTower / 100);
   updateMeter(aiHealthFill, aiTower / 100);
@@ -218,6 +225,34 @@ function updateHUD() {
   if (timerRing) {
     const ratio = Math.max(0, Math.min(1, state.timer / 180));
     timerRing.style.setProperty("--angle", `${ratio * 360}deg`);
+    let stage = "normal";
+    if (state.timer <= 30) {
+      stage = "final";
+    } else if (state.timer <= 60) {
+      stage = "overtime";
+    } else if (state.timer <= 120) {
+      stage = "double";
+    }
+    timerRing.dataset.stage = stage;
+    if (timerHint) {
+      switch (stage) {
+        case "double":
+          timerHint.textContent =
+            "Double élixir actif : multipliez vos assauts !";
+          break;
+        case "overtime":
+          timerHint.textContent =
+            "Prolongations : la moindre erreur peut coûter la partie.";
+          break;
+        case "final":
+          timerHint.textContent =
+            "Dernières secondes : lancez votre combo décisif !";
+          break;
+        default:
+          timerHint.textContent =
+            "La furie double élixir commence à 60 secondes.";
+      }
+    }
   }
 }
 

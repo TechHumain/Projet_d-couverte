@@ -13,6 +13,9 @@
   --epic: #c084fc;
   --rare: #60a5fa;
   --common: #94a3b8;
+  --rarity-rare-glow: rgba(96, 165, 250, 0.55);
+  --rarity-epic-glow: rgba(192, 132, 252, 0.6);
+  --rarity-legendary-glow: rgba(251, 191, 36, 0.65);
   --player: #38bdf8;
   --enemy: #f87171;
   --elixir: #a855f7;
@@ -46,7 +49,8 @@ body {
       rgba(148, 163, 184, 0.08),
       transparent 40%
     ),
-    var(--bg);
+    linear-gradient(130deg, #0b1120 0%, #13213a 40%, #1f2937 100%);
+  background-color: var(--bg);
   color: var(--text);
   line-height: 1.6;
   min-height: 100vh;
@@ -281,6 +285,116 @@ nav a:not(.cta):focus::after {
   pointer-events: none;
 }
 
+.hero-cards {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  pointer-events: none;
+  perspective: 1400px;
+}
+
+.hero-card {
+  --hero-card-glow: rgba(56, 189, 248, 0.55);
+  position: relative;
+  background: rgba(15, 23, 42, 0.82);
+  border-radius: 18px;
+  padding: 1rem;
+  min-width: 120px;
+  display: grid;
+  gap: 0.35rem;
+  text-align: center;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.45),
+    0 0 32px var(--hero-card-glow),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  animation: heroCardFloatA 8s ease-in-out infinite;
+  overflow: hidden;
+}
+
+.hero-card::before {
+  content: "";
+  position: absolute;
+  inset: -40% -30% 40%;
+  background: linear-gradient(
+    120deg,
+    rgba(56, 189, 248, 0.55),
+    rgba(14, 165, 233, 0.25),
+    transparent 65%
+  );
+  background: linear-gradient(
+    120deg,
+    var(--hero-card-glow),
+    color-mix(in srgb, var(--hero-card-glow) 45%, transparent),
+    transparent 65%
+  );
+  opacity: 0.55;
+  mix-blend-mode: screen;
+  transform: rotate(12deg);
+}
+
+.hero-card.rarity-rare {
+  --hero-card-glow: var(--rarity-rare-glow);
+}
+
+.hero-card.rarity-epique {
+  --hero-card-glow: var(--rarity-epic-glow);
+}
+
+.hero-card.rarity-legendaire {
+  --hero-card-glow: var(--rarity-legendary-glow);
+}
+
+.hero-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12),
+    rgba(255, 255, 255, 0) 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.hero-card:hover::after,
+.hero-card:focus::after {
+  opacity: 1;
+}
+
+.hero-card-icon {
+  font-size: 1.75rem;
+  filter: drop-shadow(0 8px 16px rgba(15, 23, 42, 0.45));
+}
+
+.hero-card-name {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.hero-card-meta {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(203, 213, 225, 0.75);
+}
+
+.hero-card:nth-child(2) {
+  animation-name: heroCardFloatB;
+  animation-delay: 1.2s;
+}
+
+.hero-card:nth-child(3) {
+  animation-name: heroCardFloatC;
+  animation-delay: 2.4s;
+}
+
 .hero-visual .tower {
   width: 80px;
   height: 160px;
@@ -509,6 +623,27 @@ nav a:not(.cta):focus::after {
     0 12px 24px rgba(15, 23, 42, 0.45);
 }
 
+.timer-ring[data-stage="double"] {
+  background: conic-gradient(
+    var(--elixir) var(--angle),
+    rgba(148, 163, 184, 0.1) var(--angle)
+  );
+  box-shadow:
+    0 0 0 1px rgba(168, 85, 247, 0.35),
+    0 12px 28px rgba(168, 85, 247, 0.3);
+}
+
+.timer-ring[data-stage="overtime"],
+.timer-ring[data-stage="final"] {
+  background: conic-gradient(
+    var(--danger) var(--angle),
+    rgba(148, 163, 184, 0.1) var(--angle)
+  );
+  box-shadow:
+    0 0 0 1px rgba(248, 113, 113, 0.4),
+    0 12px 28px rgba(248, 113, 113, 0.35);
+}
+
 .timer-ring::before {
   content: "";
   position: absolute;
@@ -529,6 +664,18 @@ nav a:not(.cta):focus::after {
   font-size: 1.1rem;
 }
 
+.timer-display > #timerRing[data-stage="double"] ~ .value,
+.timer-display > #timerRing[data-stage="double"] ~ #timerHint {
+  color: var(--elixir);
+}
+
+.timer-display > #timerRing[data-stage="overtime"] ~ .value,
+.timer-display > #timerRing[data-stage="overtime"] ~ #timerHint,
+.timer-display > #timerRing[data-stage="final"] ~ .value,
+.timer-display > #timerRing[data-stage="final"] ~ #timerHint {
+  color: var(--danger);
+}
+
 .deck {
   display: flex;
   justify-content: center;
@@ -543,6 +690,7 @@ nav a:not(.cta):focus::after {
 }
 
 .card {
+  --card-glow-color: rgba(56, 189, 248, 0.25);
   position: relative;
   background: rgba(15, 23, 42, 0.75);
   border-radius: 18px;
@@ -551,18 +699,26 @@ nav a:not(.cta):focus::after {
   color: inherit;
   cursor: pointer;
   transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   display: grid;
   gap: 0.75rem;
   border: 1px solid rgba(56, 189, 248, 0.22);
   overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform, box-shadow;
+  box-shadow:
+    0 16px 28px rgba(15, 23, 42, 0.35),
+    0 0 24px var(--card-glow-color);
 }
 
 .card:hover,
 .card:focus {
-  transform: translateY(-6px) scale(1.01);
-  box-shadow: 0 18px 40px rgba(56, 189, 248, 0.35);
+  transform: perspective(1200px) translateY(-6px) scale(1.02) rotateX(6deg)
+    rotateY(-3deg);
+  box-shadow:
+    0 22px 50px rgba(56, 189, 248, 0.4),
+    0 0 40px var(--card-glow-color);
 }
 
 .card::before {
@@ -570,13 +726,15 @@ nav a:not(.cta):focus::after {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(
-    135deg,
-    rgba(56, 189, 248, 0.25),
+  background: radial-gradient(
+    circle at 20% -10%,
+    rgba(56, 189, 248, 0.35),
     transparent 55%
   );
-  opacity: 0.4;
+  opacity: 0.55;
   pointer-events: none;
+  mix-blend-mode: screen;
+  animation: gradientFlow 12s ease-in-out infinite;
 }
 
 .card::after {
@@ -591,7 +749,7 @@ nav a:not(.cta):focus::after {
 
 .card:hover::after,
 .card:focus::after {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(15, 23, 42, 0.78);
 }
 
 .card-content {
@@ -653,11 +811,34 @@ nav a:not(.cta):focus::after {
   font-size: 1.5rem;
 }
 
+.card.rarity-rare,
+.collection-card.rarity-rare {
+  --card-glow-color: var(--rarity-rare-glow);
+  border-color: rgba(96, 165, 250, 0.45);
+}
+
+.card.rarity-epique,
+.collection-card.rarity-epique {
+  --card-glow-color: var(--rarity-epic-glow);
+  border-color: rgba(192, 132, 252, 0.5);
+}
+
+.card.rarity-legendaire,
+.collection-card.rarity-legendaire {
+  --card-glow-color: var(--rarity-legendary-glow);
+  border-color: rgba(251, 191, 36, 0.55);
+}
+
 .card.rarity-rare::before,
 .collection-card.rarity-rare::before {
   background: linear-gradient(
     135deg,
     rgba(96, 165, 250, 0.35),
+    transparent 60%
+  );
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--rare) 45%, transparent),
     transparent 60%
   );
 }
@@ -669,6 +850,11 @@ nav a:not(.cta):focus::after {
     rgba(192, 132, 252, 0.4),
     transparent 60%
   );
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--epic) 50%, transparent),
+    transparent 60%
+  );
 }
 
 .card.rarity-legendaire::before,
@@ -678,12 +864,36 @@ nav a:not(.cta):focus::after {
     rgba(251, 191, 36, 0.45),
     transparent 60%
   );
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--legendary) 55%, transparent),
+    transparent 60%
+  );
 }
 
 .arena {
   padding: clamp(2rem, 6vw, 4rem);
   position: relative;
   z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1600px;
+}
+
+.arena::before {
+  content: "";
+  position: absolute;
+  inset: 12% 18%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(56, 189, 248, 0.25),
+    rgba(15, 23, 42, 0)
+  );
+  filter: blur(50px);
+  opacity: 0.6;
+  z-index: 0;
 }
 
 .lane {
@@ -699,7 +909,11 @@ nav a:not(.cta):focus::after {
   border: 2px solid rgba(148, 163, 184, 0.3);
   box-shadow:
     inset 0 0 40px rgba(15, 23, 42, 0.6),
-    0 25px 50px rgba(15, 23, 42, 0.4);
+    0 25px 50px rgba(15, 23, 42, 0.45),
+    0 0 70px rgba(56, 189, 248, 0.15);
+  transform: perspective(1400px) rotateX(12deg);
+  transform-origin: center top;
+  z-index: 1;
 }
 
 .lane::before {
@@ -722,6 +936,7 @@ nav a:not(.cta):focus::after {
       transparent 40px
     );
   opacity: 0.5;
+  animation: laneScan 16s linear infinite;
 }
 
 .lane::after {
@@ -738,6 +953,7 @@ nav a:not(.cta):focus::after {
     transparent
   );
   transform: translateX(-50%);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
 }
 
 .unit,
@@ -753,6 +969,20 @@ nav a:not(.cta):focus::after {
   color: #0f172a;
   transition: transform 0.2s ease;
   box-shadow: 0 12px 24px rgba(15, 23, 42, 0.4);
+  transform-style: preserve-3d;
+}
+
+.unit::after {
+  content: "";
+  position: absolute;
+  inset: auto 8px -18px 8px;
+  height: 16px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.4), transparent 70%);
+  filter: blur(1px);
+  opacity: 0.85;
+  transform: translateZ(-1px);
+  pointer-events: none;
 }
 
 .unit.player {
@@ -835,6 +1065,7 @@ nav a:not(.cta):focus::after {
 }
 
 .collection-card {
+  --card-glow-color: rgba(56, 189, 248, 0.16);
   position: relative;
   background:
     radial-gradient(circle at top, rgba(96, 165, 250, 0.08), transparent 60%),
@@ -842,7 +1073,9 @@ nav a:not(.cta):focus::after {
   border-radius: var(--radius);
   padding: 1.5rem;
   border: 1px solid var(--surface-border);
-  box-shadow: var(--shadow);
+  box-shadow:
+    var(--shadow),
+    0 0 24px var(--card-glow-color);
   display: grid;
   gap: 0.75rem;
   min-height: 220px;
@@ -1087,6 +1320,66 @@ nav a:not(.cta):focus::after {
   transform: translateY(-2px);
   border-color: rgba(56, 189, 248, 0.4);
   box-shadow: 0 12px 26px rgba(56, 189, 248, 0.25);
+}
+
+@keyframes gradientFlow {
+  0%,
+  100% {
+    transform: translate3d(-6%, -4%, 0);
+  }
+  50% {
+    transform: translate3d(6%, 4%, 0);
+  }
+}
+
+@keyframes heroCardFloatA {
+  0%,
+  100% {
+    transform: rotate(-6deg) translateY(0);
+  }
+  45% {
+    transform: rotate(-4deg) translateY(-16px);
+  }
+  70% {
+    transform: rotate(-7deg) translateY(-10px);
+  }
+}
+
+@keyframes heroCardFloatB {
+  0%,
+  100% {
+    transform: rotate(-2deg) translateY(-6px);
+  }
+  50% {
+    transform: rotate(0deg) translateY(-22px);
+  }
+}
+
+@keyframes heroCardFloatC {
+  0%,
+  100% {
+    transform: rotate(4deg) translateY(-14px);
+  }
+  40% {
+    transform: rotate(6deg) translateY(-28px);
+  }
+  75% {
+    transform: rotate(2deg) translateY(-12px);
+  }
+}
+
+@keyframes laneScan {
+  0%,
+  100% {
+    background-position:
+      0 0,
+      0 0;
+  }
+  50% {
+    background-position:
+      40px 20px,
+      0 20px;
+  }
 }
 
 @keyframes drift {

@@ -20,7 +20,9 @@ progressif.
 ## Fonctionnalités
 
 - Interface moderne et responsive (360px à 1440px)
+- Vitrine héroïque animée et arène holographique en 3D légère
 - HUD inspiré des jeux mobiles premium (barres animées, anneau chrono, deck dynamique)
+- Chronomètre contextualisé (double élixir, prolongations) avec messages dynamiques
 - Gestion d'élixir en temps réel
 - Deck personnalisable jusqu'à 4 cartes actives
 - Cartes uniques avec raretés, niveaux et effets spéciaux
