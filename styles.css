@@ -211,7 +211,8 @@ nav {
   cursor: pointer;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
   display: grid;
-  gap: 0.5rem;
+  gap: 0.75rem;
+  text-align: center;
 }
 
 .card:hover,
@@ -224,9 +225,15 @@ nav {
 .card-title {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   font-weight: 600;
   margin: 0;
+}
+
+.card .rarity-badge {
+  font-size: 0.65rem;
+  padding: 0.25rem 0.5rem;
 }
 
 .card-level {
@@ -239,8 +246,59 @@ nav {
   color: var(--muted);
 }
 
-.card-icon {
-  font-size: 1.5rem;
+.card-portrait {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  background: linear-gradient(160deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.05));
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
+}
+
+.card-portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0) 0%, rgba(15, 23, 42, 0.75) 100%);
+  pointer-events: none;
+}
+
+.card-portrait.is-locked::after {
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.card-portrait--large {
+  aspect-ratio: 5 / 6;
+  min-height: 220px;
+}
+
+.card-emblem {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 999px;
+  padding: 0.35rem 0.6rem;
+  font-size: 1.1rem;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.4);
+}
+
+.portrait-rarity {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  text-transform: uppercase;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.card-visual {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .arena {
@@ -327,9 +385,13 @@ nav {
 }
 
 .collection-card.locked {
-  opacity: 0.6;
   border-style: dashed;
   border-color: rgba(148, 163, 184, 0.3);
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.collection-card .card-title {
+  font-size: 1.1rem;
 }
 
 .collection-card header {
@@ -337,6 +399,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+  margin-top: 0.25rem;
 }
 
 .rarity-badge {
@@ -401,10 +464,34 @@ nav {
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.card-progress {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.collection-card.locked .card-progress {
+  color: rgba(203, 213, 225, 0.7);
+}
+
 .collection-card button:hover,
 .collection-card button:focus {
   background: rgba(56, 189, 248, 0.1);
   transform: translateY(-1px);
+}
+
+.card-actions button[data-upgrade]:not([disabled]) {
+  border-color: rgba(52, 211, 153, 0.6);
+}
+
+.card-actions button[data-upgrade]:not([disabled]):hover,
+.card-actions button[data-upgrade]:not([disabled]):focus {
+  background: rgba(52, 211, 153, 0.18);
 }
 
 .collection-card button[disabled] {

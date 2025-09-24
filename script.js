@@ -3,6 +3,7 @@ const CARD_LIBRARY = {
     label: "Chevalier",
     rarity: "commune",
     icon: "⚔️",
+    portrait: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=480&q=80",
     description: "Soldat équilibré qui encaisse et inflige des dégâts stables.",
     cost: 3,
     baseStats: {
@@ -17,6 +18,7 @@ const CARD_LIBRARY = {
     label: "Archer",
     rarity: "commune",
     icon: "🏹",
+    portrait: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=480&q=80",
     description: "Tireuse à distance rapide, idéale pour contrôler la ligne.",
     cost: 2,
     projectile: true,
@@ -32,6 +34,7 @@ const CARD_LIBRARY = {
     label: "Sentinelle",
     rarity: "rare",
     icon: "🛡️",
+    portrait: "https://images.unsplash.com/photo-1587160645382-0a99855a1c0d?auto=format&fit=crop&w=480&q=80",
     description: "Bouclier vivant qui réduit les dégâts reçus.",
     cost: 4,
     damageReduction: 0.35,
@@ -47,6 +50,7 @@ const CARD_LIBRARY = {
     label: "Golem de pierre",
     rarity: "epique",
     icon: "🪨",
+    portrait: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?auto=format&fit=crop&w=480&q=80",
     description: "Colosse lent, dégâts renforcés contre les tours.",
     cost: 5,
     towerDamageMultiplier: 1.25,
@@ -62,6 +66,7 @@ const CARD_LIBRARY = {
     label: "Pyromancienne",
     rarity: "epique",
     icon: "🔥",
+    portrait: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=480&q=80",
     description: "Projette des boules de feu infligeant des dégâts de zone.",
     cost: 4,
     projectile: true,
@@ -78,6 +83,7 @@ const CARD_LIBRARY = {
     label: "Voleur d'ombre",
     rarity: "legendaire",
     icon: "🗡️",
+    portrait: "https://images.unsplash.com/photo-1545167622-3a6ac756afa4?auto=format&fit=crop&w=480&q=80",
     description: "Ultra rapide avec une première frappe critique.",
     cost: 3,
     firstStrikeBonus: 2.2,
@@ -89,7 +95,91 @@ const CARD_LIBRARY = {
       health: 52,
     },
   },
+  stormcaller: {
+    label: "Invocatrice d'orage",
+    rarity: "rare",
+    icon: "⚡",
+    portrait: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=480&q=80",
+    description: "Frappe plusieurs ennemis avec des éclairs en chaîne.",
+    cost: 4,
+    projectile: true,
+    splashRadius: 90,
+    baseStats: {
+      speed: 0.12,
+      damage: 6,
+      range: 150,
+      attackSpeed: 880,
+      health: 60,
+    },
+  },
+  royalGuard: {
+    label: "Garde royal",
+    rarity: "commune",
+    icon: "🪖",
+    portrait: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=480&q=80",
+    description: "Protecteur tenace qui obtient un bouclier lors de sa charge.",
+    cost: 3,
+    damageReduction: 0.25,
+    baseStats: {
+      speed: 0.11,
+      damage: 6,
+      range: 28,
+      attackSpeed: 820,
+      health: 95,
+    },
+  },
+  crystalDragon: {
+    label: "Dragon de cristal",
+    rarity: "legendaire",
+    icon: "🐉",
+    portrait: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=480&q=80",
+    description: "Dragon aérien qui ralentit les cibles touchées.",
+    cost: 6,
+    projectile: true,
+    splashRadius: 110,
+    baseStats: {
+      speed: 0.1,
+      damage: 12,
+      range: 180,
+      attackSpeed: 1100,
+      health: 190,
+    },
+  },
+  frostMonk: {
+    label: "Moine de givre",
+    rarity: "rare",
+    icon: "❄️",
+    portrait: "https://images.unsplash.com/photo-1617957772061-9ff51a158d64?auto=format&fit=crop&w=480&q=80",
+    description: "Ralenti les ennemis à chaque coup de bâton.",
+    cost: 3,
+    baseStats: {
+      speed: 0.13,
+      damage: 5,
+      range: 30,
+      attackSpeed: 780,
+      health: 75,
+    },
+  },
+  battleRam: {
+    label: "Bélier de bataille",
+    rarity: "epique",
+    icon: "🐏",
+    portrait: "https://images.unsplash.com/photo-1578925513605-7be2d6f26903?auto=format&fit=crop&w=480&q=80",
+    description: "Charge vers la tour en infligeant d'énormes dégâts d'impact.",
+    cost: 4,
+    towerDamageMultiplier: 1.6,
+    baseStats: {
+      speed: 0.15,
+      damage: 9,
+      range: 24,
+      attackSpeed: 1000,
+      health: 110,
+    },
+  },
 };
+
+const MAX_CARD_LEVEL = 5;
+const UPGRADE_SHARD_REQUIREMENTS = [0, 2, 4, 10, 20];
 
 const RARITY_ORDER = ["commune", "rare", "epique", "legendaire"];
 const MAX_DECK_SIZE = 4;
@@ -143,6 +233,12 @@ const progress = {
     sentinel: 1,
     golem: 1,
   },
+  cardShards: {
+    knight: 0,
+    archer: 0,
+    sentinel: 0,
+    golem: 0,
+  },
 };
 
 function getCardData(key) {
@@ -178,6 +274,32 @@ function getCardStats(key, side) {
   return computeStats(data, level);
 }
 
+function ensureCardTracking(key) {
+  if (!(key in progress.cardLevels)) {
+    progress.cardLevels[key] = 1;
+  }
+  if (!(key in progress.cardShards)) {
+    progress.cardShards[key] = 0;
+  }
+}
+
+function getCardShards(key) {
+  ensureCardTracking(key);
+  return progress.cardShards[key];
+}
+
+function getShardRequirement(level) {
+  if (level >= MAX_CARD_LEVEL) return null;
+  return UPGRADE_SHARD_REQUIREMENTS[level] ?? Infinity;
+}
+
+function canUpgradeCard(key) {
+  const level = getCardLevel(key);
+  const requirement = getShardRequirement(level);
+  if (!requirement) return false;
+  return getCardShards(key) >= requirement;
+}
+
 function rarityOrder(value) {
   const index = RARITY_ORDER.indexOf(value);
   return index === -1 ? RARITY_ORDER.length : index;
@@ -210,14 +332,35 @@ function renderDeck() {
       button.type = "button";
       button.className = "card";
       button.dataset.type = key;
-      button.innerHTML = `
-        <span class="card-title">
-          <span class="card-icon">${card.icon ?? card.label.charAt(0)}</span>
-          ${card.label}
-        </span>
-        <span class="card-level">Niv. ${getCardLevel(key)}</span>
-        <span class="cost">Coût : ${card.cost}</span>
-      `;
+      const portrait = document.createElement("div");
+      portrait.className = "card-portrait";
+      if (card.portrait) {
+        portrait.style.backgroundImage = `url("${card.portrait}")`;
+      }
+
+      const emblem = document.createElement("span");
+      emblem.className = "card-emblem";
+      emblem.textContent = card.icon ?? card.label.charAt(0);
+      portrait.appendChild(emblem);
+
+      const rarity = document.createElement("span");
+      rarity.className = `rarity-badge rarity-${card.rarity} portrait-rarity`;
+      rarity.textContent = card.rarity;
+      portrait.appendChild(rarity);
+
+      const title = document.createElement("span");
+      title.className = "card-title";
+      title.textContent = card.label;
+
+      const level = document.createElement("span");
+      level.className = "card-level";
+      level.textContent = `Niv. ${getCardLevel(key)}`;
+
+      const cost = document.createElement("span");
+      cost.className = "cost";
+      cost.textContent = `Coût : ${card.cost}`;
+
+      button.append(portrait, title, level, cost);
       deckContainer.appendChild(button);
     });
   }
@@ -236,12 +379,38 @@ function renderCollection() {
 
   entries.forEach(([key, card]) => {
     const unlocked = progress.unlocked.has(key);
+    ensureCardTracking(key);
     const li = document.createElement("li");
     li.className = `collection-card${unlocked ? "" : " locked"}`;
+
+    const visual = document.createElement("div");
+    visual.className = "card-visual";
+    const portrait = document.createElement("div");
+    portrait.className = "card-portrait card-portrait--large";
+    if (card.portrait) {
+      portrait.style.backgroundImage = `url("${card.portrait}")`;
+    }
+    if (!unlocked) {
+      portrait.classList.add("is-locked");
+    }
+
+    const emblem = document.createElement("span");
+    emblem.className = "card-emblem";
+    emblem.textContent = card.icon ?? card.label.charAt(0);
+    portrait.appendChild(emblem);
+
+    const rarityOverlay = document.createElement("span");
+    rarityOverlay.className = `rarity-badge rarity-${card.rarity} portrait-rarity`;
+    rarityOverlay.textContent = card.rarity;
+    portrait.appendChild(rarityOverlay);
+
+    visual.appendChild(portrait);
+    li.appendChild(visual);
+
     const header = document.createElement("header");
     const title = document.createElement("h3");
     title.className = "card-title";
-    title.innerHTML = `<span class="card-icon">${card.icon ?? card.label.charAt(0)}</span>${card.label}`;
+    title.textContent = card.label;
     header.appendChild(title);
 
     const rarity = document.createElement("span");
@@ -266,28 +435,59 @@ function renderCollection() {
     li.appendChild(statsBlock);
 
     if (unlocked) {
+      const levelValue = getCardLevel(key);
       const level = document.createElement("p");
       level.className = "card-level";
-      level.textContent = `Niveau ${getCardLevel(key)}`;
+      level.textContent = `Niveau ${levelValue}`;
       li.appendChild(level);
 
-      const button = document.createElement("button");
-      button.type = "button";
-      button.dataset.card = key;
-      if (progress.deck.includes(key)) {
-        button.textContent = "Retirer du deck";
-      } else if (progress.deck.length >= MAX_DECK_SIZE) {
-        button.textContent = "Deck complet";
-        button.disabled = true;
+      const requirement = getShardRequirement(levelValue);
+      const shards = getCardShards(key);
+      const progressInfo = document.createElement("p");
+      progressInfo.className = "card-progress";
+      if (!requirement) {
+        progressInfo.textContent = "Niveau maximum atteint";
       } else {
-        button.textContent = "Ajouter au deck";
+        progressInfo.textContent = `${shards}/${requirement} cartes requises pour le niveau ${levelValue + 1}`;
       }
-      li.appendChild(button);
+      li.appendChild(progressInfo);
+
+      const actions = document.createElement("div");
+      actions.className = "card-actions";
+
+      const upgradeButton = document.createElement("button");
+      upgradeButton.type = "button";
+      upgradeButton.dataset.upgrade = key;
+      upgradeButton.textContent = requirement ? "Améliorer" : "Niveau max";
+      if (!requirement || !canUpgradeCard(key)) {
+        upgradeButton.disabled = true;
+      }
+      actions.appendChild(upgradeButton);
+
+      const deckButton = document.createElement("button");
+      deckButton.type = "button";
+      deckButton.dataset.card = key;
+      if (progress.deck.includes(key)) {
+        deckButton.textContent = "Retirer du deck";
+      } else if (progress.deck.length >= MAX_DECK_SIZE) {
+        deckButton.textContent = "Deck complet";
+        deckButton.disabled = true;
+      } else {
+        deckButton.textContent = "Ajouter au deck";
+      }
+      actions.appendChild(deckButton);
+
+      li.appendChild(actions);
     } else {
       const locked = document.createElement("p");
       locked.className = "card-level";
       locked.textContent = "Carte verrouillée – ouvrez un coffre pour la débloquer.";
       li.appendChild(locked);
+
+      const hint = document.createElement("p");
+      hint.className = "card-progress";
+      hint.textContent = "Les coffres contiennent des cartes permettant de l'améliorer.";
+      li.appendChild(hint);
     }
 
     collectionList.appendChild(li);
@@ -500,8 +700,13 @@ function regenerateElixir(delta) {
 function getAIDeck() {
   const deck = ["knight", "archer", "sentinel"];
   if (state.timer <= 170) deck.push("golem");
+  if (state.timer <= 155) deck.push("royalGuard");
+  if (state.timer <= 140) deck.push("frostMonk");
   if (state.timer <= 135 || state.aiTower < state.playerTower) deck.push("pyromancer");
+  if (state.timer <= 120) deck.push("battleRam");
+  if (state.timer <= 105) deck.push("stormcaller");
   if (state.timer <= 90 || state.aiTower < state.playerTower - 20) deck.push("assassin");
+  if (state.timer <= 60 || state.aiTower < state.playerTower - 30) deck.push("crystalDragon");
   return deck;
 }
 
@@ -627,27 +832,36 @@ function openChest() {
   }
 
   progress.gold -= CHEST_COST;
-  const locked = Object.keys(CARD_LIBRARY).filter((key) => !progress.unlocked.has(key));
+  const allCards = Object.keys(CARD_LIBRARY);
+  const locked = allCards.filter((key) => !progress.unlocked.has(key));
+  const unlocked = Array.from(progress.unlocked);
   let message;
-  if (locked.length) {
+
+  if (locked.length && Math.random() < 0.55) {
     const cardKey = locked[Math.floor(Math.random() * locked.length)];
     progress.unlocked.add(cardKey);
+    ensureCardTracking(cardKey);
     progress.cardLevels[cardKey] = 1;
-    if (progress.deck.length < MAX_DECK_SIZE) {
+    progress.cardShards[cardKey] = (progress.cardShards[cardKey] ?? 0) + 1;
+    if (!progress.deck.includes(cardKey) && progress.deck.length < MAX_DECK_SIZE) {
       progress.deck.push(cardKey);
     }
-    message = `${CARD_LIBRARY[cardKey].label} rejoint votre armée !`;
+    message = `${CARD_LIBRARY[cardKey].label} rejoint votre armée ! (+1 carte bonus)`;
   } else {
-    const unlocked = Array.from(progress.unlocked);
-    const cardKey = unlocked[Math.floor(Math.random() * unlocked.length)];
-    const currentLevel = getCardLevel(cardKey);
-    if (currentLevel < 5) {
-      progress.cardLevels[cardKey] = currentLevel + 1;
-      message = `${CARD_LIBRARY[cardKey].label} passe niveau ${progress.cardLevels[cardKey]} !`;
-    } else {
-      const refund = 60;
-      progress.gold += refund;
-      message = `${CARD_LIBRARY[cardKey].label} est déjà au niveau max. +${refund} or.`;
+    const rewardPool = unlocked.length ? unlocked : allCards;
+    const cardKey = weightedRandom(rewardPool);
+    ensureCardTracking(cardKey);
+    const base = CARD_LIBRARY[cardKey].rarity === "legendaire" ? 1 : 2;
+    const bonus = Math.random() < 0.35 ? 1 : 0;
+    const earned = base + bonus;
+    progress.cardShards[cardKey] += earned;
+
+    const requirement = getShardRequirement(getCardLevel(cardKey));
+    const ready = requirement && progress.cardShards[cardKey] >= requirement;
+    const label = CARD_LIBRARY[cardKey].label;
+    message = `+${earned} carte${earned > 1 ? "s" : ""} ${label}`;
+    if (ready) {
+      message += " – amélioration disponible !";
     }
   }
 
@@ -676,6 +890,29 @@ function toggleDeck(cardKey) {
   renderCollection();
 }
 
+function upgradeCard(cardKey) {
+  if (!progress.unlocked.has(cardKey)) return;
+  ensureCardTracking(cardKey);
+  const currentLevel = getCardLevel(cardKey);
+  const requirement = getShardRequirement(currentLevel);
+  if (!requirement) {
+    announceShop(`${CARD_LIBRARY[cardKey].label} est déjà au niveau maximum.`, "warning");
+    return;
+  }
+
+  const shards = getCardShards(cardKey);
+  if (shards < requirement) {
+    announceShop(`Il manque ${requirement - shards} carte${requirement - shards > 1 ? "s" : ""} pour améliorer ${CARD_LIBRARY[cardKey].label}.`, "warning");
+    return;
+  }
+
+  progress.cardShards[cardKey] = shards - requirement;
+  progress.cardLevels[cardKey] = Math.min(MAX_CARD_LEVEL, currentLevel + 1);
+  renderDeck();
+  renderCollection();
+  announceShop(`${CARD_LIBRARY[cardKey].label} atteint le niveau ${getCardLevel(cardKey)} !`, "success");
+}
+
 deckContainer.addEventListener("click", (event) => {
   const cardBtn = event.target.closest(".card");
   if (!cardBtn) return;
@@ -687,9 +924,15 @@ deckContainer.addEventListener("click", (event) => {
 });
 
 collectionList.addEventListener("click", (event) => {
-  const button = event.target.closest("button[data-card]");
-  if (!button) return;
-  toggleDeck(button.dataset.card);
+  const upgradeBtn = event.target.closest("button[data-upgrade]");
+  if (upgradeBtn) {
+    upgradeCard(upgradeBtn.dataset.upgrade);
+    return;
+  }
+
+  const deckButton = event.target.closest("button[data-card]");
+  if (!deckButton) return;
+  toggleDeck(deckButton.dataset.card);
 });
 
 startGameBtn.addEventListener("click", () => {
