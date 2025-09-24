@@ -1,6 +1,8 @@
 # Mini Royale
 
-Mini Royale est un mini-jeu web inspiré de Clash Royale. Déployez des unités, gérez votre élixir et protégez votre tour dans un duel rapide de trois minutes.
+Mini Royale est un mini-jeu web inspiré de Clash Royale. Déployez des unités, gérez votre élixir et protégez votre tour dans un
+duel rapide de trois minutes. Collectionnez des cartes, améliorez votre deck et débloquez des récompenses pour relever un défi
+progressif.
 
 ## Démarrage rapide
 
@@ -18,14 +20,21 @@ Mini Royale est un mini-jeu web inspiré de Clash Royale. Déployez des unités,
 ## Fonctionnalités
 - Interface moderne et responsive (360px à 1440px)
 - Gestion d'élixir en temps réel
-- Trois types d'unités avec vitesses et dégâts uniques
-- Adversaire contrôlé par l'ordinateur
+- Deck personnalisable jusqu'à 4 cartes actives
+- Cartes uniques avec raretés, niveaux et effets spéciaux
+- Monnaie in-game (or) et progression en trophées
+- Boutique avec coffres pour débloquer/monter des cartes
+- Adversaire contrôlé par l'ordinateur avec difficulté adaptative
 - Modal de résultat accessible clavier
 
 ## Commandes utiles
-- `1` : Chevalier
-- `2` : Archer
-- `3` : Golem
+- `1` à `4` : joue la carte correspondante du deck actif
+- Clic sur « Lancer une partie » : démarre une partie
+
+## Conseils de stratégie
+- Maintenez au moins trois cartes actives dans votre deck pour lancer une partie.
+- L'or gagné après chaque partie permet d'ouvrir des coffres (120 or) qui débloquent de nouvelles cartes ou améliorent celles existantes.
+- Plus la partie avance, plus l'IA débloque des cartes puissantes : adaptez votre deck pour contrer ses combos.
 
 ## Crédits
 Projet de démonstration pédagogique. Aucune donnée personnelle collectée.
