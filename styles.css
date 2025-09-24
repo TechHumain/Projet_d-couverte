@@ -9,6 +9,10 @@
   --accent-strong: #0ea5e9;
   --danger: #f87171;
   --success: #34d399;
+  --legendary: #fbbf24;
+  --epic: #c084fc;
+  --rare: #60a5fa;
+  --common: #94a3b8;
   --radius: 16px;
   --shadow: 0 20px 40px rgba(15, 23, 42, 0.35);
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -34,6 +38,10 @@ a {
 a:hover,
 a:focus {
   color: var(--accent);
+}
+
+button {
+  font-family: inherit;
 }
 
 .topbar {
@@ -93,7 +101,8 @@ nav {
 
 .cta:focus-visible,
 .card:focus-visible,
-.ghost:focus-visible {
+.ghost:focus-visible,
+.collection-card button:focus-visible {
   outline: 3px solid rgba(56, 189, 248, 0.8);
   outline-offset: 2px;
 }
@@ -188,6 +197,8 @@ nav {
   padding: 1rem;
   box-shadow: var(--shadow);
   border: 1px solid rgba(148, 163, 184, 0.15);
+  flex-wrap: wrap;
+  min-height: 140px;
 }
 
 .card {
@@ -195,10 +206,12 @@ nav {
   border: 1px solid rgba(56, 189, 248, 0.35);
   border-radius: 14px;
   padding: 1rem;
-  min-width: 140px;
+  min-width: 150px;
   color: inherit;
   cursor: pointer;
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  display: grid;
+  gap: 0.5rem;
 }
 
 .card:hover,
@@ -209,9 +222,25 @@ nav {
 }
 
 .card-title {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin: 0;
+}
+
+.card-level {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.card .cost {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.card-icon {
+  font-size: 1.5rem;
 }
 
 .arena {
@@ -271,6 +300,148 @@ nav {
 
 .info ol {
   padding-left: 1.25rem;
+}
+
+.collection-section {
+  position: relative;
+}
+
+.collection-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 0;
+  margin: 2rem 0 1rem;
+}
+
+.collection-card {
+  background: var(--bg-soft);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 0.75rem;
+  min-height: 200px;
+}
+
+.collection-card.locked {
+  opacity: 0.6;
+  border-style: dashed;
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+.collection-card header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.rarity-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.2);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rarity-commune {
+  color: var(--common);
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+.rarity-rare {
+  color: var(--rare);
+  border-color: rgba(96, 165, 250, 0.35);
+}
+
+.rarity-epique {
+  color: var(--epic);
+  border-color: rgba(192, 132, 252, 0.35);
+}
+
+.rarity-legendaire {
+  color: var(--legendary);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.collection-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.collection-card .stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.collection-card .stats span {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.collection-card button {
+  justify-self: flex-start;
+  background: transparent;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: var(--text);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.collection-card button:hover,
+.collection-card button:focus {
+  background: rgba(56, 189, 248, 0.1);
+  transform: translateY(-1px);
+}
+
+.collection-card button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.hint {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.shop-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.shop-feedback {
+  min-height: 1.5rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.shop-feedback[data-state="success"] {
+  color: var(--success);
+}
+
+.shop-feedback[data-state="warning"] {
+  color: var(--danger);
+}
+
+.reward {
+  font-weight: 600;
+  color: var(--success);
 }
 
 .footer {

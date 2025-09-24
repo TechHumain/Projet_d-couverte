@@ -6,12 +6,12 @@
     <title>Mini Royale - Duel tactique en temps réel</title>
     <meta
       name="description"
-      content="Mini Royale est un mini-jeu tactique inspiré de Clash Royale : déployez vos unités, défendez vos tours et remportez la couronne."
+      content="Mini Royale est un mini-jeu tactique inspiré de Clash Royale : déployez vos unités, collectionnez des cartes uniques et remportez la couronne."
     />
     <meta property="og:title" content="Mini Royale - Duel tactique" />
     <meta
       property="og:description"
-      content="Déployez vos troupes en temps réel et défendez votre royaume dans ce mini-jeu gratuit inspiré de Clash Royale."
+      content="Déployez vos troupes, améliorez votre deck et défiez l'IA dans ce mini-jeu gratuit inspiré de Clash Royale."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://example.com/mini-royale" />
@@ -34,6 +34,8 @@
       </div>
       <nav aria-label="Navigation principale">
         <a href="#jouer" class="cta">Jouer maintenant</a>
+        <a href="#collection">Collection</a>
+        <a href="#shop">Marché</a>
         <a href="#regles">Règles</a>
         <a href="#credits">Crédits</a>
       </nav>
@@ -67,24 +69,38 @@
           <p class="value" id="aiScore">Tour : 100</p>
           <p class="value" id="timer">Temps : 180s</p>
         </div>
-        <div class="deck" role="list" aria-label="Cartes disponibles">
-          <button class="card" data-type="knight" type="button">
-            <span class="card-title">Chevalier</span>
-            <span class="cost">Coût : 3</span>
-          </button>
-          <button class="card" data-type="archer" type="button">
-            <span class="card-title">Archer</span>
-            <span class="cost">Coût : 2</span>
-          </button>
-          <button class="card" data-type="golem" type="button">
-            <span class="card-title">Golem</span>
-            <span class="cost">Coût : 5</span>
-          </button>
+        <div class="score-card" aria-label="Progression et monnaie">
+          <h2>Progression</h2>
+          <p class="value"><span id="goldAmount">150</span> or</p>
+          <p class="value"><span id="trophyAmount">0</span> trophées</p>
         </div>
+        <div class="deck" role="list" aria-label="Deck actif" id="deckList" aria-live="polite"></div>
       </section>
 
       <section class="arena" aria-label="Champ de bataille">
         <div class="lane" id="lane"></div>
+      </section>
+
+      <section id="collection" class="info collection-section">
+        <h2>Collection de cartes</h2>
+        <p>
+          Débloquez des cartes uniques, améliorez-les et composez un deck de 4 cartes pour affronter des vagues
+          d'ennemis de plus en plus coriaces.
+        </p>
+        <ul class="collection-list" id="collectionList" role="list"></ul>
+        <p class="hint" id="deckHint">Sélectionnez jusqu'à 4 cartes actives. Un minimum de 3 cartes est requis pour jouer.</p>
+      </section>
+
+      <section id="shop" class="info shop-section">
+        <h2>Marché de la couronne</h2>
+        <p>
+          Investissez votre or dans des coffres mystères pour débloquer de nouvelles cartes ou améliorer votre deck actuel.
+          Chaque coffre garantit une progression.
+        </p>
+        <div class="shop-actions">
+          <button id="buyChest" type="button" class="cta">Acheter un coffre (120 or)</button>
+          <p id="shopFeedback" class="shop-feedback" role="status" aria-live="polite"></p>
+        </div>
       </section>
 
       <section id="regles" class="info">
@@ -95,6 +111,7 @@
           <li>Les unités avancent vers la tour ennemie et infligent des dégâts.</li>
           <li>Défendez votre propre tour en maintenant l'adversaire à distance.</li>
           <li>La partie dure 3 minutes : la tour avec le plus de points gagne.</li>
+          <li>Gagnez de l'or et des trophées pour améliorer votre deck.</li>
         </ol>
       </section>
 
@@ -120,6 +137,7 @@
       <div class="modal-content" tabindex="-1">
         <h2 id="resultTitle">Fin de partie</h2>
         <p id="resultMessage"></p>
+        <p id="rewardMessage" class="reward"></p>
         <div class="modal-actions">
           <button type="button" class="cta" id="playAgain">Rejouer</button>
           <button type="button" class="ghost" id="closeModal">Fermer</button>
