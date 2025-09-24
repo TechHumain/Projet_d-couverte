@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
@@ -21,9 +21,17 @@
     />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="stylesheet" href="styles.css" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%23000'/><text x='50%' y='58%' fill='%23fff' font-size='36' font-family='Inter,Arial,sans-serif' text-anchor='middle'>M</text></svg>" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%23000'/><text x='50%' y='58%' fill='%23fff' font-size='36' font-family='Inter,Arial,sans-serif' text-anchor='middle'>M</text></svg>"
+    />
   </head>
   <body>
+    <div class="background-effects" aria-hidden="true">
+      <div class="nebula"></div>
+      <div class="nebula nebula-alt"></div>
+      <div class="grid-glow"></div>
+    </div>
     <header class="topbar" role="banner">
       <div class="branding">
         <span class="logo" aria-hidden="true">🏰</span>
@@ -46,35 +54,99 @@
         <div class="hero-text">
           <h1>Dominez l'arène en 3 minutes</h1>
           <p>
-            Gérez votre élixir, déployez vos unités et abattez la tour adverse dans
-            ce duel dynamique inspiré des plus grands jeux de stratégie en temps réel.
+            Gérez votre élixir, déployez vos unités et abattez la tour adverse
+            dans ce duel dynamique inspiré des plus grands jeux de stratégie en
+            temps réel.
           </p>
-          <button class="cta" id="startGame" type="button">Lancer une partie</button>
+          <div class="hero-actions">
+            <button class="cta" id="startGame" type="button">
+              Lancer une partie
+            </button>
+            <a class="ghost" href="#collection">Voir les cartes</a>
+          </div>
         </div>
         <div class="hero-visual" aria-hidden="true">
           <div class="tower player"></div>
           <div class="arena-line"></div>
           <div class="tower ai"></div>
+          <div class="hero-spark hero-spark-left"></div>
+          <div class="hero-spark hero-spark-right"></div>
         </div>
       </section>
 
       <section class="dashboard" aria-live="polite">
         <div class="score-card" aria-label="Points joueur">
-          <h2>Votre camp</h2>
-          <p class="value" id="playerScore">Tour : 100</p>
-          <p class="value" id="playerElixir">Élixir : 5</p>
+          <header class="score-header">
+            <h2>Votre camp</h2>
+            <span class="score-chip score-chip-player">Allié</span>
+          </header>
+          <div class="stat-block">
+            <p class="stat-label">Tour</p>
+            <p class="value" id="playerScore">Tour : 100</p>
+            <div class="meter health" role="presentation">
+              <span class="fill" id="playerHealthFill"></span>
+            </div>
+          </div>
+          <div class="stat-block">
+            <p class="stat-label">Élixir</p>
+            <p class="value" id="playerElixir">Élixir : 5</p>
+            <div class="meter elixir" role="presentation">
+              <span class="fill" id="playerElixirFill"></span>
+            </div>
+          </div>
         </div>
         <div class="score-card" aria-label="Points adversaire">
-          <h2>Adversaire</h2>
-          <p class="value" id="aiScore">Tour : 100</p>
-          <p class="value" id="timer">Temps : 180s</p>
+          <header class="score-header">
+            <h2>Adversaire</h2>
+            <span class="score-chip score-chip-ai">IA</span>
+          </header>
+          <div class="stat-block">
+            <p class="stat-label">Tour</p>
+            <p class="value" id="aiScore">Tour : 100</p>
+            <div class="meter health" role="presentation">
+              <span class="fill" id="aiHealthFill"></span>
+            </div>
+          </div>
+          <div class="stat-block">
+            <p class="stat-label">Élixir</p>
+            <p class="value" id="aiElixir">Élixir : 5</p>
+            <div class="meter elixir" role="presentation">
+              <span class="fill" id="aiElixirFill"></span>
+            </div>
+          </div>
+        </div>
+        <div class="score-card timer-card" aria-label="Temps restant">
+          <h2>Chronomètre</h2>
+          <div class="timer-display">
+            <div class="timer-ring" id="timerRing" aria-hidden="true">
+              <span class="timer-ring-inner"></span>
+            </div>
+            <p class="value" id="timer">Temps : 180s</p>
+            <p class="hint">La furie double élixir commence à 60 secondes.</p>
+          </div>
         </div>
         <div class="score-card" aria-label="Progression et monnaie">
           <h2>Progression</h2>
-          <p class="value"><span id="goldAmount">150</span> or</p>
-          <p class="value"><span id="trophyAmount">0</span> trophées</p>
+          <div class="stat-block">
+            <p class="value"><span id="goldAmount">150</span> or</p>
+            <div class="meter wealth" role="presentation">
+              <span class="fill" id="goldFill"></span>
+            </div>
+          </div>
+          <div class="stat-block">
+            <p class="value"><span id="trophyAmount">0</span> trophées</p>
+            <div class="meter trophy" role="presentation">
+              <span class="fill" id="trophyFill"></span>
+            </div>
+          </div>
         </div>
-        <div class="deck" role="list" aria-label="Deck actif" id="deckList" aria-live="polite"></div>
+        <div
+          class="deck"
+          role="list"
+          aria-label="Deck actif"
+          id="deckList"
+          aria-live="polite"
+        ></div>
       </section>
 
       <section class="arena" aria-label="Champ de bataille">
@@ -84,22 +156,33 @@
       <section id="collection" class="info collection-section">
         <h2>Collection de cartes</h2>
         <p>
-          Débloquez des cartes uniques, améliorez-les et composez un deck de 4 cartes pour affronter des vagues
-          d'ennemis de plus en plus coriaces.
+          Débloquez des cartes uniques, améliorez-les et composez un deck de 4
+          cartes pour affronter des vagues d'ennemis de plus en plus coriaces.
         </p>
         <ul class="collection-list" id="collectionList" role="list"></ul>
-        <p class="hint" id="deckHint">Sélectionnez jusqu'à 4 cartes actives. Un minimum de 3 cartes est requis pour jouer.</p>
+        <p class="hint" id="deckHint">
+          Sélectionnez jusqu'à 4 cartes actives. Un minimum de 3 cartes est
+          requis pour jouer.
+        </p>
       </section>
 
       <section id="shop" class="info shop-section">
         <h2>Marché de la couronne</h2>
         <p>
-          Investissez votre or dans des coffres mystères pour débloquer de nouvelles cartes ou améliorer votre deck actuel.
-          Chaque coffre garantit une progression.
+          Investissez votre or dans des coffres mystères pour débloquer de
+          nouvelles cartes ou améliorer votre deck actuel. Chaque coffre
+          garantit une progression.
         </p>
         <div class="shop-actions">
-          <button id="buyChest" type="button" class="cta">Acheter un coffre (120 or)</button>
-          <p id="shopFeedback" class="shop-feedback" role="status" aria-live="polite"></p>
+          <button id="buyChest" type="button" class="cta">
+            Acheter un coffre (120 or)
+          </button>
+          <p
+            id="shopFeedback"
+            class="shop-feedback"
+            role="status"
+            aria-live="polite"
+          ></p>
         </div>
       </section>
 
@@ -108,9 +191,15 @@
         <ol>
           <li>Cliquez sur une carte pour déployer l'unité correspondante.</li>
           <li>Chaque carte consomme de l'élixir : gérez vos ressources.</li>
-          <li>Les unités avancent vers la tour ennemie et infligent des dégâts.</li>
-          <li>Défendez votre propre tour en maintenant l'adversaire à distance.</li>
-          <li>La partie dure 3 minutes : la tour avec le plus de points gagne.</li>
+          <li>
+            Les unités avancent vers la tour ennemie et infligent des dégâts.
+          </li>
+          <li>
+            Défendez votre propre tour en maintenant l'adversaire à distance.
+          </li>
+          <li>
+            La partie dure 3 minutes : la tour avec le plus de points gagne.
+          </li>
           <li>Gagnez de l'or et des trophées pour améliorer votre deck.</li>
         </ol>
       </section>
@@ -118,12 +207,13 @@
       <section id="credits" class="info">
         <h2>Crédits & mentions</h2>
         <p>
-          Mini Royale est un projet de démonstration inspiré par Clash Royale. Toutes les
-          marques citées appartiennent à leurs propriétaires respectifs.
+          Mini Royale est un projet de démonstration inspiré par Clash Royale.
+          Toutes les marques citées appartiennent à leurs propriétaires
+          respectifs.
         </p>
         <p>
-          <strong>Mentions légales :</strong> projet étudiant, aucun suivi publicitaire,
-          cookies uniquement fonctionnels.
+          <strong>Mentions légales :</strong> projet étudiant, aucun suivi
+          publicitaire, cookies uniquement fonctionnels.
         </p>
       </section>
     </main>
@@ -133,7 +223,14 @@
       <a href="#regles">Mentions légales</a>
     </footer>
 
-    <div class="modal" id="resultModal" role="dialog" aria-modal="true" aria-labelledby="resultTitle" hidden>
+    <div
+      class="modal"
+      id="resultModal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="resultTitle"
+      hidden
+    >
       <div class="modal-content" tabindex="-1">
         <h2 id="resultTitle">Fin de partie</h2>
         <p id="resultMessage"></p>

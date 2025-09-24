@@ -95,11 +95,14 @@ const RARITY_ORDER = ["commune", "rare", "epique", "legendaire"];
 const MAX_DECK_SIZE = 4;
 const MIN_DECK_SIZE = 3;
 const CHEST_COST = 120;
+const GOLD_TARGET = 500;
+const TROPHY_TARGET = 1000;
 
 const lane = document.getElementById("lane");
 const playerScore = document.getElementById("playerScore");
 const aiScore = document.getElementById("aiScore");
 const playerElixir = document.getElementById("playerElixir");
+const aiElixirDisplay = document.getElementById("aiElixir");
 const timerEl = document.getElementById("timer");
 const deckContainer = document.getElementById("deckList");
 const startGameBtn = document.getElementById("startGame");
@@ -112,6 +115,13 @@ const closeModalBtn = document.getElementById("closeModal");
 const collectionList = document.getElementById("collectionList");
 const goldAmount = document.getElementById("goldAmount");
 const trophyAmount = document.getElementById("trophyAmount");
+const playerHealthFill = document.getElementById("playerHealthFill");
+const aiHealthFill = document.getElementById("aiHealthFill");
+const playerElixirFill = document.getElementById("playerElixirFill");
+const aiElixirFill = document.getElementById("aiElixirFill");
+const timerRing = document.getElementById("timerRing");
+const goldFill = document.getElementById("goldFill");
+const trophyFill = document.getElementById("trophyFill");
 const buyChestBtn = document.getElementById("buyChest");
 const shopFeedback = document.getElementById("shopFeedback");
 const deckHint = document.getElementById("deckHint");
@@ -183,16 +193,39 @@ function rarityOrder(value) {
   return index === -1 ? RARITY_ORDER.length : index;
 }
 
+function updateMeter(fillElement, ratio) {
+  if (!fillElement) return;
+  const clamped = Math.max(0, Math.min(1, ratio));
+  fillElement.style.width = `${Math.round(clamped * 100)}%`;
+}
+
 function updateHUD() {
-  playerScore.textContent = `Tour : ${Math.max(0, Math.round(state.playerTower))}`;
-  aiScore.textContent = `Tour : ${Math.max(0, Math.round(state.aiTower))}`;
+  const playerTower = Math.max(0, Math.round(state.playerTower));
+  const aiTower = Math.max(0, Math.round(state.aiTower));
+  playerScore.textContent = `Tour : ${playerTower}`;
+  aiScore.textContent = `Tour : ${aiTower}`;
   playerElixir.textContent = `Élixir : ${Math.floor(state.playerElixir)}`;
+  if (aiElixirDisplay) {
+    aiElixirDisplay.textContent = `Élixir : ${Math.floor(state.aiElixir)}`;
+  }
   timerEl.textContent = `Temps : ${state.timer}s`;
+
+  updateMeter(playerHealthFill, playerTower / 100);
+  updateMeter(aiHealthFill, aiTower / 100);
+  updateMeter(playerElixirFill, Math.min(10, state.playerElixir) / 10);
+  updateMeter(aiElixirFill, Math.min(10, state.aiElixir) / 10);
+
+  if (timerRing) {
+    const ratio = Math.max(0, Math.min(1, state.timer / 180));
+    timerRing.style.setProperty("--angle", `${ratio * 360}deg`);
+  }
 }
 
 function renderProgress() {
   goldAmount.textContent = progress.gold;
   trophyAmount.textContent = progress.trophies;
+  updateMeter(goldFill, progress.gold / GOLD_TARGET);
+  updateMeter(trophyFill, progress.trophies / TROPHY_TARGET);
 }
 
 function renderDeck() {
@@ -206,17 +239,25 @@ function renderDeck() {
     progress.deck.forEach((key) => {
       if (!progress.unlocked.has(key)) return;
       const card = getCardData(key);
+      const stats = computeStats(card, getCardLevel(key));
       const button = document.createElement("button");
       button.type = "button";
-      button.className = "card";
+      button.className = `card rarity-${card.rarity}`;
       button.dataset.type = key;
+      button.setAttribute(
+        "aria-label",
+        `${card.label} – coût ${card.cost} élixir`,
+      );
       button.innerHTML = `
-        <span class="card-title">
-          <span class="card-icon">${card.icon ?? card.label.charAt(0)}</span>
-          ${card.label}
-        </span>
-        <span class="card-level">Niv. ${getCardLevel(key)}</span>
-        <span class="cost">Coût : ${card.cost}</span>
+        <span class="elixir-orb">${card.cost}</span>
+        <div class="card-content">
+          <div class="card-header">
+            <span class="card-icon">${card.icon ?? card.label.charAt(0)}</span>
+            <span class="card-title">${card.label}</span>
+          </div>
+          <p class="card-level">Niv. ${getCardLevel(key)}</p>
+          <p class="cost">PV ${stats.health} • DPS ${stats.damage}</p>
+        </div>
       `;
       deckContainer.appendChild(button);
     });
@@ -237,7 +278,7 @@ function renderCollection() {
   entries.forEach(([key, card]) => {
     const unlocked = progress.unlocked.has(key);
     const li = document.createElement("li");
-    li.className = `collection-card${unlocked ? "" : " locked"}`;
+    li.className = `collection-card rarity-${card.rarity}${unlocked ? "" : " locked"}`;
     const header = document.createElement("header");
     const title = document.createElement("h3");
     title.className = "card-title";
@@ -286,7 +327,8 @@ function renderCollection() {
     } else {
       const locked = document.createElement("p");
       locked.className = "card-level";
-      locked.textContent = "Carte verrouillée – ouvrez un coffre pour la débloquer.";
+      locked.textContent =
+        "Carte verrouillée – ouvrez un coffre pour la débloquer.";
       li.appendChild(locked);
     }
 
@@ -356,7 +398,10 @@ function spawnUnit(typeKey, side) {
   el.dataset.id = newUnit.id;
   el.textContent = getCardData(typeKey).icon ?? card.label.charAt(0);
   el.setAttribute("role", "img");
-  el.setAttribute("aria-label", `${card.label} ${side === "player" ? "allié" : "ennemi"}`);
+  el.setAttribute(
+    "aria-label",
+    `${card.label} ${side === "player" ? "allié" : "ennemi"}`,
+  );
   lane.appendChild(el);
   newUnit.element = el;
   state.units.push(newUnit);
@@ -405,7 +450,10 @@ function attackUnit(attacker, defender) {
 
   if (!defeated && stats.splashRadius > 0) {
     const splashTargets = state.units.filter(
-      (unit) => unit.side !== attacker.side && unit.id !== defender.id && Math.abs(unit.x - defender.x) <= stats.splashRadius
+      (unit) =>
+        unit.side !== attacker.side &&
+        unit.id !== defender.id &&
+        Math.abs(unit.x - defender.x) <= stats.splashRadius,
     );
     splashTargets.forEach((unit) => {
       damageUnit(unit, Math.round(damage * 0.6));
@@ -475,13 +523,19 @@ function updateUnits(delta) {
     unit.x += speed * direction;
 
     if (unit.side === "player" && unit.x >= laneWidth - 72) {
-      dealTowerDamage("ai", Math.round(unit.stats.damage * unit.stats.towerDamageMultiplier));
+      dealTowerDamage(
+        "ai",
+        Math.round(unit.stats.damage * unit.stats.towerDamageMultiplier),
+      );
       removeUnit(unit);
       return;
     }
 
     if (unit.side === "ai" && unit.x <= 24) {
-      dealTowerDamage("player", Math.round(unit.stats.damage * unit.stats.towerDamageMultiplier));
+      dealTowerDamage(
+        "player",
+        Math.round(unit.stats.damage * unit.stats.towerDamageMultiplier),
+      );
       removeUnit(unit);
       return;
     }
@@ -494,14 +548,20 @@ function regenerateElixir(delta) {
   const regenRate = delta / 1000;
   state.playerElixir = Math.min(10, state.playerElixir + regenRate * 1.25);
   const aggressionBoost = state.aiTower < state.playerTower ? 1.3 : 1;
-  state.aiElixir = Math.min(10, state.aiElixir + regenRate * (1.15 + (state.aiLevel - 1) * 0.25) * aggressionBoost);
+  state.aiElixir = Math.min(
+    10,
+    state.aiElixir +
+      regenRate * (1.15 + (state.aiLevel - 1) * 0.25) * aggressionBoost,
+  );
 }
 
 function getAIDeck() {
   const deck = ["knight", "archer", "sentinel"];
   if (state.timer <= 170) deck.push("golem");
-  if (state.timer <= 135 || state.aiTower < state.playerTower) deck.push("pyromancer");
-  if (state.timer <= 90 || state.aiTower < state.playerTower - 20) deck.push("assassin");
+  if (state.timer <= 135 || state.aiTower < state.playerTower)
+    deck.push("pyromancer");
+  if (state.timer <= 90 || state.aiTower < state.playerTower - 20)
+    deck.push("assassin");
   return deck;
 }
 
@@ -522,12 +582,17 @@ function weightedRandom(cards) {
 
 function aiBehavior(delta) {
   state.aiDecisionTimer += delta;
-  const decisionThreshold = Math.max(700, 2200 - state.aiLevel * 320 - (state.aiTower < state.playerTower ? 380 : 0));
+  const decisionThreshold = Math.max(
+    700,
+    2200 - state.aiLevel * 320 - (state.aiTower < state.playerTower ? 380 : 0),
+  );
   if (state.aiDecisionTimer < decisionThreshold) return;
   state.aiDecisionTimer = 0;
 
   const aiDeck = getAIDeck();
-  const affordable = aiDeck.filter((key) => getCardData(key).cost <= state.aiElixir);
+  const affordable = aiDeck.filter(
+    (key) => getCardData(key).cost <= state.aiElixir,
+  );
   if (!affordable.length) return;
 
   const typeKey = weightedRandom(affordable);
@@ -597,7 +662,10 @@ function endGame(winner) {
   cancelAnimationFrame(state.loopHandle);
   const rewards = applyRewards(winner);
   modal.hidden = false;
-  modalMessage.textContent = winner === "player" ? "Vous remportez la couronne !" : "La tour a cédé. Retentez votre chance.";
+  modalMessage.textContent =
+    winner === "player"
+      ? "Vous remportez la couronne !"
+      : "La tour a cédé. Retentez votre chance.";
   modalTitle.textContent = winner === "player" ? "Victoire !" : "Défaite";
   rewardMessage.textContent = rewards.text;
   rewardMessage.classList.toggle("reward", winner === "player");
@@ -620,12 +688,17 @@ function announceShop(message, state = "info") {
 
 function openChest() {
   if (progress.gold < CHEST_COST) {
-    announceShop(`Il manque ${CHEST_COST - progress.gold} or pour ce coffre.`, "warning");
+    announceShop(
+      `Il manque ${CHEST_COST - progress.gold} or pour ce coffre.`,
+      "warning",
+    );
     return;
   }
 
   progress.gold -= CHEST_COST;
-  const locked = Object.keys(CARD_LIBRARY).filter((key) => !progress.unlocked.has(key));
+  const locked = Object.keys(CARD_LIBRARY).filter(
+    (key) => !progress.unlocked.has(key),
+  );
   let message;
   if (locked.length) {
     const cardKey = locked[Math.floor(Math.random() * locked.length)];
@@ -659,13 +732,19 @@ function toggleDeck(cardKey) {
   if (!progress.unlocked.has(cardKey)) return;
   if (progress.deck.includes(cardKey)) {
     if (progress.deck.length <= MIN_DECK_SIZE) {
-      announceShop(`Gardez au moins ${MIN_DECK_SIZE} cartes actives.`, "warning");
+      announceShop(
+        `Gardez au moins ${MIN_DECK_SIZE} cartes actives.`,
+        "warning",
+      );
       return;
     }
     progress.deck = progress.deck.filter((key) => key !== cardKey);
   } else {
     if (progress.deck.length >= MAX_DECK_SIZE) {
-      announceShop("Deck complet. Retirez une carte avant d'en ajouter une nouvelle.", "warning");
+      announceShop(
+        "Deck complet. Retirez une carte avant d'en ajouter une nouvelle.",
+        "warning",
+      );
       return;
     }
     progress.deck.push(cardKey);

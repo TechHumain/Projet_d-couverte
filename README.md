@@ -18,7 +18,9 @@ progressif.
 ```
 
 ## Fonctionnalités
+
 - Interface moderne et responsive (360px à 1440px)
+- HUD inspiré des jeux mobiles premium (barres animées, anneau chrono, deck dynamique)
 - Gestion d'élixir en temps réel
 - Deck personnalisable jusqu'à 4 cartes actives
 - Cartes uniques avec raretés, niveaux et effets spéciaux
@@ -28,13 +30,16 @@ progressif.
 - Modal de résultat accessible clavier
 
 ## Commandes utiles
+
 - `1` à `4` : joue la carte correspondante du deck actif
 - Clic sur « Lancer une partie » : démarre une partie
 
 ## Conseils de stratégie
+
 - Maintenez au moins trois cartes actives dans votre deck pour lancer une partie.
 - L'or gagné après chaque partie permet d'ouvrir des coffres (120 or) qui débloquent de nouvelles cartes ou améliorent celles existantes.
 - Plus la partie avance, plus l'IA débloque des cartes puissantes : adaptez votre deck pour contrer ses combos.
 
 ## Crédits
+
 Projet de démonstration pédagogique. Aucune donnée personnelle collectée.
