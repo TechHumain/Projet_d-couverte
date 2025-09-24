@@ -597,6 +597,7 @@ function endGame(winner) {
   cancelAnimationFrame(state.loopHandle);
   const rewards = applyRewards(winner);
   modal.hidden = false;
+  modal.classList.add("is-open");
   modalMessage.textContent = winner === "player" ? "Vous remportez la couronne !" : "La tour a cédé. Retentez votre chance.";
   modalTitle.textContent = winner === "player" ? "Victoire !" : "Défaite";
   rewardMessage.textContent = rewards.text;
@@ -608,6 +609,7 @@ function endGame(winner) {
 
 function toggleModal(open) {
   modal.hidden = !open;
+  modal.classList.toggle("is-open", open);
   if (!open) {
     startGameBtn.focus();
   }
