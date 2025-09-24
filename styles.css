@@ -457,11 +457,15 @@ nav {
 .modal {
   position: fixed;
   inset: 0;
-  display: grid;
+  display: none;
   place-items: center;
   background: rgba(15, 23, 42, 0.8);
   backdrop-filter: blur(8px);
   padding: 2rem;
+}
+
+.modal.is-open {
+  display: grid;
 }
 
 .modal-content {
